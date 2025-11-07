@@ -100,7 +100,7 @@
 
     <script>
       (function () {
-        const WEBHOOK_URL = 'https://n8n.alefiot.xyz/webhook/ce41dd5f-0015-43ac-901f-6d4933eb60c2';
+        const WEBHOOK_URL = 'https://n8n.alefiot.xyz/webhook/3823d296-ace6-4b8f-a8e4-80d044e5e652';
         // Base64("naji:test") provided by you
         const AUTH_HEADER = 'Basic bmFqaTp0ZXN0';
 
@@ -119,50 +119,7 @@
           outEl.textContent = text;
         }
 
-        function formatResponse(data) {
-          try {
-            if (!data || typeof data !== 'object') return null;
 
-            const doctor = data.doctor_name ?? '';
-            const patient = data.patient_name ?? '';
-            const phn = data.personal_health_number ?? '';
-            const medsKey = 'list_of_madicationName_qtyOfEachPill_repeats_dayOfUse_dateOfPercipition';
-            const meds = Array.isArray(data[medsKey]) ? data[medsKey] : [];
-
-            const lines = [];
-            if (doctor) lines.push(`Doctor name: ${doctor}`);
-            if (patient) lines.push(`Patient name: ${patient}`);
-            if (phn) lines.push(`Personal health number: ${phn}`);
-            if (lines.length) lines.push('');
-
-            if (meds.length) {
-              lines.push('Medications:');
-              meds.forEach((m, idx) => {
-                const name = m.medican_name ?? '';
-                const qty = m.qty_number ?? '';
-                const rep = m.repeats ?? '';
-                const dir = m.directions_of_use ?? '';
-                const date = m.date_of_prescription ?? '';
-                const parts = [];
-                if (name) parts.push(`  - Name: ${name}`);
-                if (qty) parts.push(`    Qty: ${qty}`);
-                if (rep) parts.push(`    Repeats: ${rep}`);
-                if (dir) parts.push(`    Directions: ${dir}`);
-                if (date) parts.push(`    Date: ${date}`);
-
-                // Ensure a bullet even if some fields are missing
-                if (parts.length === 0 && (m && typeof m === 'object')) {
-                  parts.push(`  - Item ${idx + 1}`);
-                }
-                lines.push(...parts);
-              });
-            }
-
-            return lines.length ? lines.join('\n') : null;
-          } catch (_) {
-            return null;
-          }
-        }
 
         async function sendPDF(file) {
           const fd = new FormData();
@@ -219,10 +176,9 @@
             } else {
               setStatus(`Request failed (${result.status} ${result.statusText})`, true);
             }
-            // Prefer a readable text summary if JSON is present
-            const formatted = result.json ? formatResponse(result.json) : null;
-            if (formatted) {
-              showOutputText(formatted + '\n\n--- Raw JSON ---\n' + result.text);
+            // Show only the detailed JSON response
+            if (result.json) {
+              showOutputText(JSON.stringify(result.json, null, 2));
             } else {
               showOutputText(result.text);
             }
