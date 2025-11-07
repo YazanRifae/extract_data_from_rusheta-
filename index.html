@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -16,10 +16,11 @@
       }
       body {
         margin: 0;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+          'Apple Color Emoji', 'Segoe UI Emoji';
         background: radial-gradient(1200px 800px at 10% 10%, #0b1220 0%, var(--bg) 40%),
-                    radial-gradient(800px 600px at 90% 10%, #0a1a2e 0%, var(--bg) 50%),
-                    radial-gradient(1000px 800px at 50% 120%, #0a101b 0%, var(--bg) 60%);
+          radial-gradient(800px 600px at 90% 10%, #0a1a2e 0%, var(--bg) 50%),
+          radial-gradient(1000px 800px at 50% 120%, #0a101b 0%, var(--bg) 60%);
         color: var(--text);
         min-height: 100vh;
         display: grid;
@@ -27,11 +28,11 @@
       }
       .container {
         width: min(800px, 92vw);
-        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-        border: 1px solid rgba(255,255,255,0.08);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+        border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 16px;
         padding: 24px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
         backdrop-filter: blur(6px);
       }
       h1 {
@@ -39,12 +40,20 @@
         font-size: 22px;
         letter-spacing: 0.3px;
       }
-      p { color: var(--muted); margin: 0 0 18px; }
-      .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-      input[type="file"] {
+      p {
+        color: var(--muted);
+        margin: 0 0 18px;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      input[type='file'] {
         color: var(--text);
         background: #0b1323;
-        border: 1px dashed rgba(255,255,255,0.18);
+        border: 1px dashed rgba(255, 255, 255, 0.18);
         border-radius: 10px;
         padding: 12px;
       }
@@ -57,18 +66,32 @@
         padding: 10px 16px;
         border-radius: 10px;
         cursor: pointer;
-        box-shadow: 0 6px 18px rgba(56,189,248,0.35);
+        box-shadow: 0 6px 18px rgba(56, 189, 248, 0.35);
       }
-      button[disabled] { opacity: 0.6; cursor: not-allowed; }
-      .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
-      .status { margin-top: 16px; font-size: 14px; }
-      .status.ok { color: var(--ok); }
-      .status.err { color: var(--danger); }
+      button[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+      .status {
+        margin-top: 16px;
+        font-size: 14px;
+      }
+      .status.ok {
+        color: var(--ok);
+      }
+      .status.err {
+        color: var(--danger);
+      }
       pre {
         white-space: pre-wrap;
         word-break: break-word;
         background: #0b1220;
-        border: 1px solid rgba(255,255,255,0.08);
+        border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 12px;
         padding: 14px;
         margin-top: 16px;
@@ -84,7 +107,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>Upload PDF </h1>
+      <h1>Upload PDF</h1>
 
       <form id="uploadForm">
         <div class="row">
@@ -95,102 +118,103 @@
 
       <div id="status" class="status"></div>
       <pre id="output" aria-live="polite" aria-atomic="true"></pre>
-      
     </div>
 
     <script>
-      (function () {
-        const WEBHOOK_URL = 'https://n8n.alefiot.xyz/webhook/3823d296-ace6-4b8f-a8e4-80d044e5e652';
+      ;(function () {
+        const WEBHOOK_URL = 'https://n8n.alefiot.xyz/webhook/3823d296-ace6-4b8f-a8e4-80d044e5e652'
         // Base64("naji:test") provided by you
-        const AUTH_HEADER = 'Basic bmFqaTp0ZXN0';
+        const AUTH_HEADER = 'Basic bmFqaTp0ZXN0'
 
-        const form = document.getElementById('uploadForm');
-        const input = document.getElementById('pdfInput');
-        const btn = document.getElementById('sendBtn');
-        const statusEl = document.getElementById('status');
-        const outEl = document.getElementById('output');
+        const form = document.getElementById('uploadForm')
+        const input = document.getElementById('pdfInput')
+        const btn = document.getElementById('sendBtn')
+        const statusEl = document.getElementById('status')
+        const outEl = document.getElementById('output')
 
         function setStatus(msg, isError = false) {
-          statusEl.textContent = msg;
-          statusEl.className = 'status ' + (isError ? 'err' : 'ok');
+          statusEl.textContent = msg
+          statusEl.className = 'status ' + (isError ? 'err' : 'ok')
         }
 
         function showOutputText(text) {
-          outEl.textContent = text;
+          outEl.textContent = text
         }
 
-
-
         async function sendPDF(file) {
-          const fd = new FormData();
+          const fd = new FormData()
           // IMPORTANT: field name must be 'invoice' to match your cURL example
-          fd.append('invoice', file, file.name || 'document.pdf');
+          fd.append('invoice', file, file.name || 'document.pdf')
 
           const res = await fetch(WEBHOOK_URL, {
             method: 'POST',
             headers: {
               // Do NOT set Content-Type when using FormData; browser will set proper boundary
-              'Authorization': AUTH_HEADER,
+              Authorization: AUTH_HEADER,
             },
             body: fd,
             // mode: 'cors' is default; included here for clarity
             mode: 'cors',
             credentials: 'omit',
-          });
+          })
 
-          let text;
-          let json;
+          let text
+          let json
           try {
             // Try JSON first
-            json = await res.clone().json();
-            text = JSON.stringify(json, null, 2);
+            json = await res.clone().json()
+            text = JSON.stringify(json, null, 2)
           } catch (_) {
             // Fallback to plain text
-            text = await res.text();
+            text = await res.text()
           }
 
-          return { ok: res.ok, status: res.status, statusText: res.statusText, text, json };
+          return { ok: res.ok, status: res.status, statusText: res.statusText, text, json }
         }
 
         form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          outEl.textContent = '';
+          e.preventDefault()
+          outEl.textContent = ''
 
-          const file = input.files && input.files[0];
+          const file = input.files && input.files[0]
           if (!file) {
-            setStatus('Please choose a PDF file first.', true);
-            return;
+            setStatus('Please choose a PDF file first.', true)
+            return
           }
-          if (file.type && file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-            setStatus('The selected file does not look like a PDF.', true);
-            return;
+          if (
+            file.type &&
+            file.type !== 'application/pdf' &&
+            !file.name.toLowerCase().endsWith('.pdf')
+          ) {
+            setStatus('The selected file does not look like a PDF.', true)
+            return
           }
 
-          btn.disabled = true;
-          setStatus('Uploading…');
+          btn.disabled = true
+          setStatus('Uploading…')
 
           try {
-            const result = await sendPDF(file);
+            const result = await sendPDF(file)
             if (result.ok) {
-              setStatus(`Success (${result.status} ${result.statusText})`);
+              setStatus(`Success (${result.status} ${result.statusText})`)
             } else {
-              setStatus(`Request failed (${result.status} ${result.statusText})`, true);
+              setStatus(`Request failed (${result.status} ${result.statusText})`, true)
             }
             // Show only the detailed JSON response
             if (result.json) {
-              showOutputText(JSON.stringify(result.json, null, 2));
+              showOutputText(JSON.stringify(result.json, null, 2))
             } else {
-              showOutputText(result.text);
+              showOutputText(result.text)
             }
           } catch (err) {
-            console.error(err);
-            setStatus('Error: ' + (err && err.message ? err.message : 'Unknown error'), true);
-            showOutputText(String(err));
+            console.error(err)
+            setStatus('Error: ' + (err && err.message ? err.message : 'Unknown error'), true)
+            showOutputText(String(err))
           } finally {
-            btn.disabled = false;
+            btn.disabled = false
           }
-        });
-      })();
+        })
+      })()
     </script>
   </body>
 </html>
