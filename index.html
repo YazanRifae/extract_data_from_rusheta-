@@ -178,11 +178,16 @@
               const value = obj[key]
               html += spaces + '  "' + key + '": '
               if (key === 'quantity_per_fill') {
-                html += '<span style="color: red;">' + JSON.stringify(value) + '</span>'
+                html +=
+                  '<span style="color: red;">' + JSON.stringify(value) + ' //Qty on winrx</span>'
               } else if (key === 'days_for_each_fill') {
-                html += '<span style="color: green;">' + JSON.stringify(value) + '</span>'
+                html +=
+                  '<span style="color: green;">' + JSON.stringify(value) + ' //Days on winrx</span>'
               } else if (key === 'repeats') {
-                html += '<span style="color: #b8860b;">' + JSON.stringify(value) + '</span>'
+                html +=
+                  '<span style="color: #b8860b;">' +
+                  JSON.stringify(value) +
+                  ' //REfill on Winrx</span>'
               } else {
                 html += jsonToHtml(value, indent + 1)
               }
