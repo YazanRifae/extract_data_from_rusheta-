@@ -117,7 +117,22 @@
       </form>
 
       <div id="status" class="status"></div>
-      <div id="output" aria-live="polite" aria-atomic="true" style="white-space: pre-wrap; word-break: break-word; background: #0b1220; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 14px; margin-top: 16px; max-height: 60vh; overflow: auto;"></div>
+      <div
+        id="output"
+        aria-live="polite"
+        aria-atomic="true"
+        style="
+          white-space: pre-wrap;
+          word-break: break-word;
+          background: #0b1220;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 12px;
+          padding: 14px;
+          margin-top: 16px;
+          max-height: 60vh;
+          overflow: auto;
+        "
+      ></div>
     </div>
 
     <script>
@@ -139,46 +154,46 @@
 
         function showOutputText(text, isHtml = false) {
           if (isHtml) {
-            outEl.innerHTML = text;
+            outEl.innerHTML = text
           } else {
-            outEl.textContent = text;
+            outEl.textContent = text
           }
         }
 
         function jsonToHtml(obj, indent = 0) {
-          let html = '';
-          const spaces = '  '.repeat(indent);
+          let html = ''
+          const spaces = '  '.repeat(indent)
           if (Array.isArray(obj)) {
-            html += '[\n';
+            html += '[\n'
             obj.forEach((item, i) => {
-              html += spaces + '  ' + jsonToHtml(item, indent + 1);
-              if (i < obj.length - 1) html += ',';
-              html += '\n';
-            });
-            html += spaces + ']';
+              html += spaces + '  ' + jsonToHtml(item, indent + 1)
+              if (i < obj.length - 1) html += ','
+              html += '\n'
+            })
+            html += spaces + ']'
           } else if (typeof obj === 'object' && obj !== null) {
-            html += '{\n';
-            const keys = Object.keys(obj);
+            html += '{\n'
+            const keys = Object.keys(obj)
             keys.forEach((key, i) => {
-              const value = obj[key];
-              html += spaces + '  "' + key + '": ';
+              const value = obj[key]
+              html += spaces + '  "' + key + '": '
               if (key === 'quantity_per_fill') {
-                html += '<span style="color: red;">' + JSON.stringify(value) + '</span>';
+                html += '<span style="color: red;">' + JSON.stringify(value) + '</span>'
               } else if (key === 'days_for_each_fill') {
-                html += '<span style="color: green;">' + JSON.stringify(value) + '</span>';
+                html += '<span style="color: green;">' + JSON.stringify(value) + '</span>'
               } else if (key === 'repeats') {
-                html += '<span style="color: #b8860b;">' + JSON.stringify(value) + '</span>';
+                html += '<span style="color: #b8860b;">' + JSON.stringify(value) + '</span>'
               } else {
-                html += jsonToHtml(value, indent + 1);
+                html += jsonToHtml(value, indent + 1)
               }
-              if (i < keys.length - 1) html += ',';
-              html += '\n';
-            });
-            html += spaces + '}';
+              if (i < keys.length - 1) html += ','
+              html += '\n'
+            })
+            html += spaces + '}'
           } else {
-            html += JSON.stringify(obj);
+            html += JSON.stringify(obj)
           }
-          return html;
+          return html
         }
 
         async function sendPDF(file) {
@@ -242,10 +257,10 @@
             }
             // Show only the detailed JSON response
             if (result.json) {
-              const displayText = jsonToHtml(result.json);
-              showOutputText(displayText, true);
+              const displayText = jsonToHtml(result.json)
+              showOutputText(displayText, true)
             } else {
-              showOutputText(result.text);
+              showOutputText(result.text)
             }
           } catch (err) {
             console.error(err)
